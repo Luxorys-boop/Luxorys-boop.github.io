@@ -1,0 +1,665 @@
+Voici la mise à jour complète de ton **portfolio Persona 3** intégrée avec les données réelles de ton CV (Mathys Leverrier) et de ton profil GitHub.
+
+### Modifications apportées :
+- **Identité & Profil** : Intégration de ton nom (**Mathys Leverrier**), de ta formation (**Master ISA - IA & Cloud à l'Université de Tours**) et de ton niveau d'anglais (Toeic C1).
+- **S.Link / Expériences** : Ajout de tes expériences clés — ton stage chez **CGI** (.NET/Azure, Remix, Docker, ArgoCD), ton projet de recherche au **LIFAT** (Agent IA de Scrapping NLP) et la gestion de projet au **CHRU de Tours**.
+- **Compendium / Projets** : Mise en avant de tes dépôts et projets réels (*DetectorFraudSystem*, *ProjetHospitalier*, *Agent IA Scraping*, *ProjetProgrammeSportif*).
+- **Velvet Room / Contact** : Intégration de ton e-mail direct `mathys.perso@outlook.fr` et de tes réseaux.
+
+---
+
+### Code complet à copier dans `index.html`
+
+```html
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mathys Leverrier // Luxorys-boop - System Status</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:ital,wght@0,300;0,700;1,400&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --p3-bg: #040a14;
+            --p3-blue-dark: #091a34;
+            --p3-blue-mid: #003a70;
+            --p3-cyan: #00d2ff;
+            --p3-cyan-bright: #29e7cd;
+            --p3-yellow: #ffd000;
+            --p3-white: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--p3-bg);
+            color: var(--p3-white);
+            font-family: 'JetBrains Mono', monospace;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .scanlines {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(
+                rgba(18, 16, 16, 0) 50%, 
+                rgba(0, 0, 0, 0.25) 50%
+            ), linear-gradient(
+                90deg,
+                rgba(255, 0, 0, 0.03),
+                rgba(0, 255, 0, 0.01),
+                rgba(0, 0, 255, 0.03)
+            );
+            background-size: 100% 3px, 6px 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .p3-container {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            border-bottom: 3px solid var(--p3-cyan);
+            padding-bottom: 1rem;
+        }
+
+        .logo-block {
+            background: var(--p3-cyan);
+            color: var(--p3-bg);
+            padding: 0.5rem 2rem;
+            transform: skewX(-15deg);
+            display: inline-block;
+            box-shadow: 4px 4px 0px var(--p3-yellow);
+        }
+
+        .logo-block h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.2rem;
+            letter-spacing: 2px;
+            transform: skewX(15deg);
+        }
+
+        nav ul {
+            display: flex;
+            gap: 1.2rem;
+            list-style: none;
+        }
+
+        nav a {
+            color: var(--p3-white);
+            text-decoration: none;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            padding: 0.4rem 1rem;
+            background: var(--p3-blue-dark);
+            border: 2px solid var(--p3-cyan);
+            transform: skewX(-12deg);
+            display: inline-block;
+            transition: all 0.2s ease;
+        }
+
+        nav a span {
+            display: inline-block;
+            transform: skewX(12deg);
+        }
+
+        nav a:hover {
+            background: var(--p3-cyan-bright);
+            color: var(--p3-bg);
+            box-shadow: -4px 4px 0px var(--p3-yellow);
+            transform: skewX(-12deg) translateY(-3px);
+        }
+
+        .hero-section {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 2rem;
+            align-items: center;
+            margin-bottom: 4rem;
+        }
+
+        .avatar-card {
+            background: linear-gradient(135deg, var(--p3-blue-mid), var(--p3-blue-dark));
+            border: 3px solid var(--p3-cyan);
+            padding: 1.5rem;
+            transform: skewX(-6deg);
+            position: relative;
+            box-shadow: 8px 8px 0px rgba(0, 210, 255, 0.2);
+        }
+
+        .avatar-card::after {
+            content: "MASTER ISA // IA & CLOUD";
+            position: absolute;
+            top: -15px;
+            right: -10px;
+            background: var(--p3-yellow);
+            color: #000;
+            font-weight: bold;
+            padding: 0.2rem 0.8rem;
+            font-size: 0.8rem;
+            transform: skewX(6deg);
+        }
+
+        .avatar-img-placeholder {
+            width: 100%;
+            height: 280px;
+            background: #0d274c;
+            border: 2px dashed var(--p3-cyan-bright);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: var(--p3-cyan);
+            text-align: center;
+        }
+
+        .hero-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3.8rem;
+            line-height: 0.9;
+            color: var(--p3-white);
+            text-shadow: 3px 3px 0px var(--p3-blue-mid), 6px 6px 0px var(--p3-cyan);
+            margin-bottom: 0.8rem;
+            letter-spacing: 2px;
+        }
+
+        .subtitle-badge {
+            display: inline-block;
+            background: var(--p3-cyan);
+            color: var(--p3-bg);
+            font-weight: bold;
+            padding: 0.3rem 1rem;
+            margin-bottom: 1.2rem;
+            transform: skewX(-10deg);
+        }
+
+        .hero-bio {
+            line-height: 1.6;
+            color: #c0d8f0;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--p3-cyan);
+            padding-left: 1rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.8rem;
+            background: rgba(9, 26, 52, 0.85);
+            border: 1px solid var(--p3-cyan);
+            padding: 1rem;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px dashed rgba(0, 210, 255, 0.3);
+            padding-bottom: 0.3rem;
+            font-size: 0.85rem;
+        }
+
+        .stat-name { color: var(--p3-cyan-bright); font-weight: bold; }
+        .stat-val { color: var(--p3-yellow); }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 4rem 0 2rem 0;
+        }
+
+        .section-header h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.8rem;
+            color: var(--p3-white);
+            background: var(--p3-blue-mid);
+            padding: 0.2rem 1.5rem;
+            transform: skewX(-12deg);
+            border-left: 6px solid var(--p3-yellow);
+        }
+
+        .section-header .line {
+            flex-grow: 1;
+            height: 3px;
+            background: linear-gradient(90deg, var(--p3-cyan), transparent);
+        }
+
+        .experience-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .exp-card {
+            background: rgba(9, 26, 52, 0.85);
+            border: 2px solid var(--p3-cyan);
+            padding: 1.5rem;
+            position: relative;
+            transform: skewX(-3deg);
+        }
+
+        .exp-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(0, 210, 255, 0.3);
+            padding-bottom: 0.5rem;
+        }
+
+        .exp-role {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.5rem;
+            color: var(--p3-yellow);
+        }
+
+        .exp-company {
+            color: var(--p3-cyan-bright);
+            font-weight: bold;
+        }
+
+        .exp-date {
+            background: var(--p3-blue-mid);
+            padding: 0.2rem 0.6rem;
+            font-size: 0.8rem;
+            border: 1px solid var(--p3-cyan);
+        }
+
+        .exp-body {
+            font-size: 0.9rem;
+            color: #b0cce8;
+            line-height: 1.5;
+        }
+
+        .compendium-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .persona-card {
+            background: rgba(9, 26, 52, 0.85);
+            border: 2px solid var(--p3-cyan);
+            padding: 1.5rem;
+            position: relative;
+            transition: all 0.25s ease;
+            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%);
+        }
+
+        .persona-card:hover {
+            transform: translateY(-6deg);
+            border-color: var(--p3-cyan-bright);
+            box-shadow: 0 0 20px rgba(0, 210, 255, 0.4);
+        }
+
+        .card-arcana {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.1rem;
+            color: var(--p3-yellow);
+            letter-spacing: 1px;
+        }
+
+        .card-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.7rem;
+            color: var(--p3-white);
+            margin-bottom: 0.5rem;
+        }
+
+        .card-desc {
+            font-size: 0.88rem;
+            color: #b0cce8;
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
+
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tag {
+            background: rgba(0, 210, 255, 0.15);
+            border: 1px solid var(--p3-cyan);
+            color: var(--p3-cyan-bright);
+            font-size: 0.75rem;
+            padding: 0.2rem 0.5rem;
+            transform: skewX(-8deg);
+        }
+
+        .card-btn {
+            display: inline-block;
+            background: var(--p3-cyan);
+            color: var(--p3-bg);
+            text-decoration: none;
+            font-weight: bold;
+            padding: 0.4rem 0.9rem;
+            transform: skewX(-10deg);
+            transition: background 0.2s;
+            font-size: 0.85rem;
+        }
+
+        .card-btn:hover { background: var(--p3-yellow); }
+
+        .velvet-box {
+            background: linear-gradient(180deg, #020813 0%, #081a38 100%);
+            border: 3px double var(--p3-cyan);
+            padding: 2.5rem;
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .velvet-box h3 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.5rem;
+            color: var(--p3-cyan-bright);
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+        }
+
+        .social-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
+        }
+
+        .btn-p3 {
+            background: var(--p3-blue-mid);
+            color: var(--p3-white);
+            border: 2px solid var(--p3-cyan);
+            padding: 0.8rem 2rem;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-decoration: none;
+            transform: skewX(-12deg);
+            transition: all 0.2s;
+        }
+
+        .btn-p3:hover {
+            background: var(--p3-yellow);
+            color: #000;
+            box-shadow: 0 0 15px var(--p3-yellow);
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #507090;
+            font-size: 0.85rem;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(0, 210, 255, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .hero-section { grid-template-columns: 1fr; }
+            header { flex-direction: column; gap: 1rem; }
+            .hero-title { font-size: 2.8rem; }
+            .exp-header { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="bg-canvas"></canvas>
+    <div class="scanlines"></div>
+
+    <div class="p3-container">
+        
+        <header>
+            <div class="logo-block">
+                <h1>MATHYS LEVERRIER // LUXORYS-BOOP</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#status"><span>Status</span></a></li>
+                    <li><a href="#slinks"><span>S.Links</span></a></li>
+                    <li><a href="#compendium"><span>Compendium</span></a></li>
+                    <li><a href="#velvet"><span>Velvet Room</span></a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- Status -->
+        <section id="status" class="hero-section">
+            <div class="avatar-card">
+                <div class="avatar-img-placeholder">
+                    <p style="font-size: 3rem;">🔮</p>
+                    <p>[ SYSTEM STATUS: ONLINE ]</p>
+                </div>
+            </div>
+
+            <div class="hero-info">
+                <div class="subtitle-badge">MASTER ISA - IA & CLOUD COMPUTING</div>
+                <h1 class="hero-title">MATHYS LEVERRIER</h1>
+                <p class="hero-bio">
+                    Étudiant en Master ISA (Intelligence Artificielle & Cloud) à l'Université de Tours. Passionné par le développement Backend, les architectures distribuées Cloud (AWS, Azure) et le traitement de données / IA.
+                </p>
+
+                <div class="stats-grid">
+                    <div class="stat-item"><span class="stat-name">FORMATION:</span><span class="stat-val">Master ISA Tours</span></div>
+                    <div class="stat-item"><span class="stat-name">LANGUES:</span><span class="stat-val">Anglais C1 (Toeic)</span></div>
+                    <div class="stat-item"><span class="stat-name">MAIN TECH:</span><span class="stat-val">Java, Python, C++</span></div>
+                    <div class="stat-item"><span class="stat-name">CLOUD/DEVOPS:</span><span class="stat-val">AWS, Azure, Docker</span></div>
+                    <div class="stat-item"><span class="stat-name">GITHUB:</span><span class="stat-val">Luxorys-boop</span></div>
+                    <div class="stat-item"><span class="stat-name">PERMIS:</span><span class="stat-val">Permis B</span></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Social Links / Expériences -->
+        <section id="slinks">
+            <div class="section-header">
+                <h2>S.LINK // EXPÉRIENCES & PARCOURS</h2>
+                <div class="line"></div>
+            </div>
+
+            <div class="experience-list">
+                <div class="exp-card">
+                    <div class="exp-header">
+                        <div>
+                            <span class="exp-role">Stagiaire Développeur Backend & Cloud</span> &bull; 
+                            <span class="exp-company">CGI Tours</span>
+                        </div>
+                        <span class="exp-date">Avril - Août 2026</span>
+                    </div>
+                    <div class="exp-body">
+                        Correction d'anomalies sur back-end .NET/Azure (projet 3CA BTP). Développement de nouvelles fonctionnalités, migration vers Vite/Remix, conteneurisation Docker, déploiement ArgoCD et résolution de vulnérabilités (CVE) sur le projet ADEME.
+                    </div>
+                </div>
+
+                <div class="exp-card">
+                    <div class="exp-header">
+                        <div>
+                            <span class="exp-role">Conception d'Agent IA (Scraping/NLP)</span> &bull; 
+                            <span class="exp-company">LIFAT (Laboratoire d'Informatique de Tours)</span>
+                        </div>
+                        <span class="exp-date">Projet de Stage</span>
+                    </div>
+                    <div class="exp-body">
+                        Développement d'un Agent IA de Scraping/Crawling pour la collecte et la désambiguïsation de données d'étudiants post-études (Traitement automatique du langage / NLP).
+                    </div>
+                </div>
+
+                <div class="exp-card">
+                    <div class="exp-header">
+                        <div>
+                            <span class="exp-role">Chef de Projet - App FullStack Hospitalière</span> &bull; 
+                            <span class="exp-company">CHRU de Tours</span>
+                        </div>
+                        <span class="exp-date">Projet de fin de Licence</span>
+                    </div>
+                    <div class="exp-body">
+                        Gestion de projet en méthodes Agiles/SCRUM pour la conception d'une application de gestion des emplois du temps du personnel hospitalier (Stack J2EE & React).
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Compendium / Projets -->
+        <section id="compendium">
+            <div class="section-header">
+                <h2>PERSONA COMPENDIUM // PROJETS</h2>
+                <div class="line"></div>
+            </div>
+
+            <div class="compendium-grid">
+                <div class="persona-card">
+                    <div class="card-arcana">ARCANA I // JUSTICE</div>
+                    <h3 class="card-title">DetectorFraudSystem</h3>
+                    <p class="card-desc">Système d'analyse et de détection de fraudes basé sur des algorithmes de Machine Learning et du traitement de données.</p>
+                    <div class="card-tags">
+                        <span class="tag">Python</span>
+                        <span class="tag">Scikit-Learn</span>
+                        <span class="tag">Pandas</span>
+                    </div>
+                    <a href="https://github.com/Luxorys-boop/DetectorFraudSystem" target="_blank" class="card-btn">VIEW REPO &rarr;</a>
+                </div>
+
+                <div class="persona-card">
+                    <div class="card-arcana">ARCANA II // THE EMPRESS</div>
+                    <h3 class="card-title">ProjetHospitalier</h3>
+                    <p class="card-desc">Application web fullstack de planification et gestion des plannings hospitaliers pour le CHRU de Tours.</p>
+                    <div class="card-tags">
+                        <span class="tag">JavaScript</span>
+                        <span class="tag">React</span>
+                        <span class="tag">J2EE</span>
+                    </div>
+                    <a href="https://github.com/Luxorys-boop/ProjetHospitalier" target="_blank" class="card-btn">VIEW REPO &rarr;</a>
+                </div>
+
+                <div class="persona-card">
+                    <div class="card-arcana">ARCANA III // THE HERMIT</div>
+                    <h3 class="card-title">Agent IA Scraping & NLP</h3>
+                    <p class="card-desc">Agent autonome d'extraction, nettoyage et désambiguïsation de données textuelles complexes (LIFAT).</p>
+                    <div class="card-tags">
+                        <span class="tag">Python</span>
+                        <span class="tag">BeautifulSoup</span>
+                        <span class="tag">NLP</span>
+                    </div>
+                    <a href="https://github.com/Luxorys-boop" target="_blank" class="card-btn">VIEW ON GITHUB &rarr;</a>
+                </div>
+
+                <div class="persona-card">
+                    <div class="card-arcana">ARCANA IV // STRENGTH</div>
+                    <h3 class="card-title">ProjetProgrammeSportif</h3>
+                    <p class="card-desc">Application orientée objet pour la gestion et le suivi personnalisé de programmes d'entraînement sportif.</p>
+                    <div class="card-tags">
+                        <span class="tag">Java</span>
+                        <span class="tag">JavaFX</span>
+                    </div>
+                    <a href="https://github.com/Luxorys-boop/ProjetProgrammeSportif" target="_blank" class="card-btn">VIEW REPO &rarr;</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Velvet Room -->
+        <section id="velvet">
+            <div class="velvet-box">
+                <h3>VELVET ROOM // CONTRACT & CONTACT</h3>
+                <p style="color: #a0c0e0;">"Welcome to the Velvet Room. Feel free to reach out for contracts, apprenticeships, or tech discussions."</p>
+                
+                <div class="social-buttons">
+                    <a href="mailto:mathys.perso@outlook.fr" class="btn-p3"><span>EMAIL: MATHYS.PERSO@OUTLOOK.FR</span></a>
+                    <a href="https://github.com/Luxorys-boop" target="_blank" class="btn-p3"><span>GITHUB: LUXORYS-BOOP</span></a>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>DESIGN INSPIRED BY PERSONA 3 (ATLUS) &bull; DEVELOPED BY MATHYS LEVERRIER (LUXORYS-BOOP) &bull; 2026</p>
+        </footer>
+
+    </div>
+
+    <script>
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height, particles = [];
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Particle {
+            constructor() { this.reset(); }
+            reset() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.size = Math.random() * 2.5 + 0.5;
+                this.speedY = -(Math.random() * 0.8 + 0.2);
+                this.speedX = (Math.random() - 0.5) * 0.3;
+                this.opacity = Math.random() * 0.7 + 0.2;
+            }
+            update() {
+                this.y += this.speedY;
+                this.x += this.speedX;
+                if (this.y < 0) { this.reset(); this.y = height; }
+            }
+            draw() {
+                ctx.fillStyle = `rgba(0, 210, 255, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < 70; i++) { particles.push(new Particle()); }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            let grad = ctx.createLinearGradient(0, 0, width, height);
+            grad.addColorStop(0, '#040a14');
+            grad.addColorStop(0.5, '#091c38');
+            grad.addColorStop(1, '#02060d');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, width, height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+</body>
+</html>
+```
+
+---
+
+N'hésite pas si tu souhaites ajouter une section spécifique (certifications AWS, détail d'un projet particulier) !
