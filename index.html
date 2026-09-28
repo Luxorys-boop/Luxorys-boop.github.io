@@ -3,20 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mathys Leverrier // Luxorys-boop - System Status</title>
+    <title>DARK HOUR // Mathys Leverrier (Luxorys-boop)</title>
+    <!-- Fonts Persona 3 Style -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:ital,wght@0,300;0,700;1,400&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;700;800&family=Teko:wght@600;700&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --p3-bg: #040a14;
-            --p3-blue-dark: #091a34;
-            --p3-blue-mid: #003a70;
-            --p3-cyan: #00d2ff;
-            --p3-cyan-bright: #29e7cd;
-            --p3-yellow: #ffd000;
+            --p3-bg-dark: #010814;
+            --p3-blue-deep: #03152d;
+            --p3-blue-mid: #003e7e;
+            --p3-cyan-bright: #00f0ff;
+            --p3-cyan-neon: #27f5d8;
+            --p3-yellow: #ffea00;
             --p3-white: #ffffff;
+            --p3-text-dim: #92b5db;
         }
 
         * {
@@ -27,14 +29,15 @@
         }
 
         body {
-            background-color: var(--p3-bg);
+            background-color: var(--p3-bg-dark);
             color: var(--p3-white);
             font-family: 'JetBrains Mono', monospace;
             overflow-x: hidden;
             min-height: 100vh;
         }
 
-        #bg-canvas {
+        /* Dark Hour Background Canvas */
+        #p3-canvas {
             position: fixed;
             top: 0;
             left: 0;
@@ -44,339 +47,409 @@
             pointer-events: none;
         }
 
+        /* Scanlines Overlay */
         .scanlines {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(
-                rgba(18, 16, 16, 0) 50%, 
-                rgba(0, 0, 0, 0.25) 50%
-            ), linear-gradient(
-                90deg,
-                rgba(255, 0, 0, 0.03),
-                rgba(0, 255, 0, 0.01),
-                rgba(0, 0, 255, 0.03)
-            );
-            background-size: 100% 3px, 6px 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.3) 50%),
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
+            background-size: 100% 4px, 6px 100%;
             z-index: 1;
             pointer-events: none;
         }
 
-        .p3-container {
+        /* Giant Background Watermark Text */
+        .bg-watermark {
+            position: fixed;
+            bottom: -50px;
+            right: -20px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 14vw;
+            color: rgba(0, 240, 255, 0.03);
+            white-space: nowrap;
+            z-index: 1;
+            pointer-events: none;
+            transform: rotate(-6deg);
+            line-height: 0.8;
+        }
+
+        /* Layout Container */
+        .p3-wrapper {
             position: relative;
             z-index: 2;
-            max-width: 1200px;
+            max-width: 1280px;
             margin: 0 auto;
-            padding: 2rem;
-        }
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 3rem;
-            border-bottom: 3px solid var(--p3-cyan);
-            padding-bottom: 1rem;
-        }
-
-        .logo-block {
-            background: var(--p3-cyan);
-            color: var(--p3-bg);
-            padding: 0.5rem 2rem;
-            transform: skewX(-15deg);
-            display: inline-block;
-            box-shadow: 4px 4px 0px var(--p3-yellow);
-        }
-
-        .logo-block h1 {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 2.2rem;
-            letter-spacing: 2px;
-            transform: skewX(15deg);
-        }
-
-        nav ul {
-            display: flex;
-            gap: 1.2rem;
-            list-style: none;
-        }
-
-        nav a {
-            color: var(--p3-white);
-            text-decoration: none;
-            font-family: 'Rajdhani', sans-serif;
-            font-weight: 700;
-            font-size: 1.1rem;
-            text-transform: uppercase;
-            padding: 0.4rem 1rem;
-            background: var(--p3-blue-dark);
-            border: 2px solid var(--p3-cyan);
-            transform: skewX(-12deg);
-            display: inline-block;
-            transition: all 0.2s ease;
-        }
-
-        nav a span {
-            display: inline-block;
-            transform: skewX(12deg);
-        }
-
-        nav a:hover {
-            background: var(--p3-cyan-bright);
-            color: var(--p3-bg);
-            box-shadow: -4px 4px 0px var(--p3-yellow);
-            transform: skewX(-12deg) translateY(-3px);
-        }
-
-        .hero-section {
-            display: grid;
-            grid-template-columns: 1fr 1.5fr;
-            gap: 2rem;
-            align-items: center;
-            margin-bottom: 4rem;
-        }
-
-        .avatar-card {
-            background: linear-gradient(135deg, var(--p3-blue-mid), var(--p3-blue-dark));
-            border: 3px solid var(--p3-cyan);
             padding: 1.5rem;
-            transform: skewX(-6deg);
-            position: relative;
-            box-shadow: 8px 8px 0px rgba(0, 210, 255, 0.2);
         }
 
-        .avatar-card::after {
-            content: "MASTER ISA // IA & CLOUD";
-            position: absolute;
-            top: -15px;
-            right: -10px;
-            background: var(--p3-yellow);
-            color: #000;
-            font-weight: bold;
-            padding: 0.2rem 0.8rem;
-            font-size: 0.8rem;
-            transform: skewX(6deg);
-        }
-
-        .avatar-img-placeholder {
-            width: 100%;
-            height: 280px;
-            background: #0d274c;
-            border: 2px dashed var(--p3-cyan-bright);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            color: var(--p3-cyan);
-            text-align: center;
-        }
-
-        .hero-title {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 3.8rem;
-            line-height: 0.9;
-            color: var(--p3-white);
-            text-shadow: 3px 3px 0px var(--p3-blue-mid), 6px 6px 0px var(--p3-cyan);
-            margin-bottom: 0.8rem;
-            letter-spacing: 2px;
-        }
-
-        .subtitle-badge {
-            display: inline-block;
-            background: var(--p3-cyan);
-            color: var(--p3-bg);
-            font-weight: bold;
-            padding: 0.3rem 1rem;
-            margin-bottom: 1.2rem;
-            transform: skewX(-10deg);
-        }
-
-        .hero-bio {
-            line-height: 1.6;
-            color: #c0d8f0;
-            margin-bottom: 1.5rem;
-            border-left: 4px solid var(--p3-cyan);
-            padding-left: 1rem;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 0.8rem;
-            background: rgba(9, 26, 52, 0.85);
-            border: 1px solid var(--p3-cyan);
-            padding: 1rem;
-        }
-
-        .stat-item {
+        /* TOP HUD: Calendar / Moon Phase / Clock */
+        .top-hud {
             display: flex;
             justify-content: space-between;
-            border-bottom: 1px dashed rgba(0, 210, 255, 0.3);
-            padding-bottom: 0.3rem;
-            font-size: 0.85rem;
+            align-items: flex-start;
+            margin-bottom: 2rem;
+            position: relative;
         }
 
-        .stat-name { color: var(--p3-cyan-bright); font-weight: bold; }
-        .stat-val { color: var(--p3-yellow); }
+        .p3-logo-banner {
+            background: var(--p3-cyan-bright);
+            color: var(--p3-bg-dark);
+            padding: 0.6rem 2.5rem 0.6rem 1.5rem;
+            transform: skewX(-18deg) translateX(-10px);
+            box-shadow: 6px 6px 0px var(--p3-yellow);
+            border-right: 6px solid var(--p3-blue-mid);
+        }
 
-        .section-header {
+        .p3-logo-banner h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.5rem;
+            line-height: 0.9;
+            letter-spacing: 2px;
+            transform: skewX(18deg);
+        }
+
+        .p3-logo-banner span {
+            font-family: 'Teko', sans-serif;
+            font-size: 1.2rem;
+            display: block;
+            text-transform: uppercase;
+        }
+
+        /* P3 Clock / Moon Widget */
+        .moon-widget {
+            background: linear-gradient(135deg, var(--p3-blue-deep), var(--p3-bg-dark));
+            border: 2px solid var(--p3-cyan-bright);
+            padding: 0.6rem 1.2rem;
+            transform: skewX(-12deg);
             display: flex;
             align-items: center;
             gap: 1rem;
-            margin: 4rem 0 2rem 0;
+            box-shadow: -4px 4px 0px var(--p3-blue-mid);
         }
 
-        .section-header h2 {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 2.8rem;
-            color: var(--p3-white);
-            background: var(--p3-blue-mid);
-            padding: 0.2rem 1.5rem;
-            transform: skewX(-12deg);
-            border-left: 6px solid var(--p3-yellow);
-        }
-
-        .section-header .line {
-            flex-grow: 1;
-            height: 3px;
-            background: linear-gradient(90deg, var(--p3-cyan), transparent);
-        }
-
-        .experience-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        .exp-card {
-            background: rgba(9, 26, 52, 0.85);
-            border: 2px solid var(--p3-cyan);
-            padding: 1.5rem;
+        .moon-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: var(--p3-yellow);
+            box-shadow: 0 0 12px var(--p3-yellow);
             position: relative;
-            transform: skewX(-3deg);
         }
 
-        .exp-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.5rem;
-            border-bottom: 1px solid rgba(0, 210, 255, 0.3);
-            padding-bottom: 0.5rem;
+        .moon-icon::after {
+            content: '';
+            position: absolute;
+            top: 2px; right: 2px;
+            width: 30px; height: 30px;
+            border-radius: 50%;
+            background: var(--p3-blue-deep);
         }
 
-        .exp-role {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 1.5rem;
+        .date-text {
+            transform: skewX(12deg);
+            text-align: right;
+        }
+
+        .date-text .day {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.8rem;
             color: var(--p3-yellow);
+            line-height: 1;
         }
 
-        .exp-company {
+        .date-text .phase {
+            font-size: 0.75rem;
             color: var(--p3-cyan-bright);
+            letter-spacing: 1px;
             font-weight: bold;
         }
 
-        .exp-date {
-            background: var(--p3-blue-mid);
-            padding: 0.2rem 0.6rem;
-            font-size: 0.8rem;
-            border: 1px solid var(--p3-cyan);
+        /* MAIN CONTENT GRID: Left Command Wheel + Right Screen */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+            margin-top: 1rem;
         }
 
-        .exp-body {
-            font-size: 0.9rem;
-            color: #b0cce8;
-            line-height: 1.5;
+        /* Command Menu (Left Side) */
+        .command-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
         }
 
+        .cmd-btn {
+            background: linear-gradient(90deg, var(--p3-blue-deep) 0%, rgba(3, 21, 45, 0.4) 100%);
+            border: 2px solid var(--p3-cyan-bright);
+            color: var(--p3-white);
+            padding: 1rem 1.2rem;
+            font-family: 'Teko', sans-serif;
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transform: skewX(-15deg);
+            cursor: pointer;
+            transition: all 0.15s ease-out;
+            position: relative;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cmd-btn span {
+            display: inline-block;
+            transform: skewX(15deg);
+        }
+
+        .cmd-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 0%; height: 100%;
+            background: var(--p3-cyan-bright);
+            z-index: -1;
+            transition: width 0.15s ease-out;
+        }
+
+        .cmd-btn:hover, .cmd-btn.active {
+            color: var(--p3-bg-dark);
+            border-color: var(--p3-yellow);
+            box-shadow: -6px 6px 0px var(--p3-yellow);
+            transform: skewX(-15deg) translateX(10px);
+        }
+
+        .cmd-btn:hover::before, .cmd-btn.active::before {
+            width: 100%;
+        }
+
+        .cmd-num {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.2rem;
+            opacity: 0.7;
+        }
+
+        /* Dialogue Box Component (P3 Dialogue Frame) */
+        .p3-dialogue-box {
+            background: linear-gradient(135deg, rgba(2, 19, 41, 0.95), rgba(1, 10, 24, 0.98));
+            border: 3px solid var(--p3-cyan-bright);
+            padding: 1.8rem;
+            position: relative;
+            transform: skewX(-4deg);
+            box-shadow: 0 0 25px rgba(0, 240, 255, 0.25);
+            margin-bottom: 2rem;
+        }
+
+        .dialogue-speaker {
+            position: absolute;
+            top: -18px;
+            left: 20px;
+            background: var(--p3-yellow);
+            color: #000;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.3rem;
+            padding: 0.2rem 1.2rem;
+            transform: skewX(4deg);
+            letter-spacing: 1px;
+            box-shadow: 3px 3px 0px var(--p3-blue-mid);
+        }
+
+        .dialogue-text {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: #d0e8ff;
+            margin-top: 0.5rem;
+        }
+
+        .dialogue-cursor {
+            display: inline-block;
+            color: var(--p3-yellow);
+            margin-left: 0.5rem;
+            animation: pulseCursor 0.8s infinite alternate;
+        }
+
+        @keyframes pulseCursor {
+            0% { opacity: 0.2; transform: translateY(0); }
+            100% { opacity: 1; transform: translateY(4px); }
+        }
+
+        /* Stats & Radar Display */
+        .status-panel {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .radar-box {
+            background: rgba(3, 21, 45, 0.8);
+            border: 2px solid var(--p3-cyan-bright);
+            padding: 1.2rem;
+            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%);
+        }
+
+        .radar-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            color: var(--p3-yellow);
+            margin-bottom: 0.8rem;
+            border-bottom: 1px dashed var(--p3-cyan-bright);
+            padding-bottom: 0.3rem;
+        }
+
+        .param-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.6rem;
+            font-size: 0.85rem;
+        }
+
+        .param-label {
+            color: var(--p3-cyan-neon);
+            font-weight: bold;
+            width: 30px;
+        }
+
+        .param-bar-bg {
+            flex-grow: 1;
+            height: 10px;
+            background: #082042;
+            margin: 0 0.8rem;
+            border: 1px solid var(--p3-cyan-bright);
+            transform: skewX(-10deg);
+            overflow: hidden;
+        }
+
+        .param-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--p3-cyan-bright), var(--p3-yellow));
+        }
+
+        .param-val {
+            color: var(--p3-white);
+            font-weight: bold;
+            min-width: 45px;
+            text-align: right;
+        }
+
+        /* Social Link Cards (Experience) */
+        .slink-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .slink-card {
+            background: linear-gradient(90deg, rgba(3, 21, 45, 0.9), rgba(1, 10, 24, 0.7));
+            border-left: 5px solid var(--p3-yellow);
+            border-top: 1px solid var(--p3-cyan-bright);
+            border-bottom: 1px solid var(--p3-cyan-bright);
+            border-right: 1px solid var(--p3-cyan-bright);
+            padding: 1.2rem;
+            transform: skewX(-3deg);
+            position: relative;
+        }
+
+        .slink-rank {
+            position: absolute;
+            top: 10px; right: 15px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.4rem;
+            color: var(--p3-yellow);
+        }
+
+        .slink-title {
+            font-family: 'Teko', sans-serif;
+            font-size: 1.8rem;
+            color: var(--p3-cyan-bright);
+            line-height: 1;
+        }
+
+        .slink-sub {
+            font-size: 0.85rem;
+            color: var(--p3-text-dim);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Compendium Grid (Projects) */
         .compendium-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
         }
 
         .persona-card {
-            background: rgba(9, 26, 52, 0.85);
-            border: 2px solid var(--p3-cyan);
-            padding: 1.5rem;
+            background: rgba(3, 21, 45, 0.9);
+            border: 2px solid var(--p3-cyan-bright);
+            padding: 1.2rem;
             position: relative;
-            transition: all 0.25s ease;
+            transition: all 0.2s ease;
             clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%);
         }
 
         .persona-card:hover {
-            transform: translateY(-6deg);
-            border-color: var(--p3-cyan-bright);
-            box-shadow: 0 0 20px rgba(0, 210, 255, 0.4);
+            transform: translateY(-5deg);
+            border-color: var(--p3-yellow);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
         }
 
-        .card-arcana {
+        .arcana-tag {
             font-family: 'Bebas Neue', sans-serif;
             font-size: 1.1rem;
             color: var(--p3-yellow);
             letter-spacing: 1px;
         }
 
-        .card-title {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 1.7rem;
+        .repo-name {
+            font-family: 'Teko', sans-serif;
+            font-size: 1.8rem;
             color: var(--p3-white);
-            margin-bottom: 0.5rem;
+            line-height: 1.1;
+            margin-bottom: 0.4rem;
         }
 
-        .card-desc {
-            font-size: 0.88rem;
-            color: #b0cce8;
+        .repo-desc {
+            font-size: 0.85rem;
+            color: var(--p3-text-dim);
             margin-bottom: 1rem;
             line-height: 1.4;
         }
 
-        .card-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.4rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .tag {
-            background: rgba(0, 210, 255, 0.15);
-            border: 1px solid var(--p3-cyan);
-            color: var(--p3-cyan-bright);
-            font-size: 0.75rem;
-            padding: 0.2rem 0.5rem;
-            transform: skewX(-8deg);
-        }
-
-        .card-btn {
+        .repo-btn {
             display: inline-block;
-            background: var(--p3-cyan);
-            color: var(--p3-bg);
+            background: var(--p3-cyan-bright);
+            color: var(--p3-bg-dark);
             text-decoration: none;
             font-weight: bold;
-            padding: 0.4rem 0.9rem;
-            transform: skewX(-10deg);
-            transition: background 0.2s;
             font-size: 0.85rem;
+            padding: 0.4rem 1rem;
+            transform: skewX(-12deg);
+            transition: background 0.2s;
         }
 
-        .card-btn:hover { background: var(--p3-yellow); }
+        .repo-btn:hover {
+            background: var(--p3-yellow);
+        }
 
-        .velvet-box {
-            background: linear-gradient(180deg, #020813 0%, #081a38 100%);
-            border: 3px double var(--p3-cyan);
-            padding: 2.5rem;
+        /* Velvet Room Box */
+        .velvet-container {
+            background: linear-gradient(180deg, #020d1f 0%, #081d3d 100%);
+            border: 3px double var(--p3-cyan-bright);
+            padding: 2rem;
             text-align: center;
-            margin-top: 3rem;
+            position: relative;
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
         }
 
-        .velvet-box h3 {
+        .velvet-title {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 2.5rem;
-            color: var(--p3-cyan-bright);
+            font-size: 2.8rem;
+            color: var(--p3-cyan-neon);
             letter-spacing: 2px;
-            margin-bottom: 0.5rem;
         }
 
-        .social-buttons {
+        .velvet-links {
             display: flex;
             justify-content: center;
             gap: 1.5rem;
@@ -384,217 +457,316 @@
             margin-top: 1.5rem;
         }
 
-        .btn-p3 {
+        .p3-action-btn {
             background: var(--p3-blue-mid);
             color: var(--p3-white);
-            border: 2px solid var(--p3-cyan);
-            padding: 0.8rem 2rem;
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 1.2rem;
-            font-weight: bold;
+            border: 2px solid var(--p3-cyan-bright);
+            padding: 0.8rem 1.8rem;
+            font-family: 'Teko', sans-serif;
+            font-size: 1.5rem;
             text-decoration: none;
             transform: skewX(-12deg);
             transition: all 0.2s;
+            display: inline-block;
         }
 
-        .btn-p3:hover {
+        .p3-action-btn:hover {
             background: var(--p3-yellow);
-            color: #000;
+            color: var(--p3-bg-dark);
             box-shadow: 0 0 15px var(--p3-yellow);
+        }
+
+        /* Hidden section helper */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeInP3 0.25s ease-out; }
+
+        @keyframes fadeInP3 {
+            from { opacity: 0; transform: translateY(10px) skewX(-2deg); }
+            to { opacity: 1; transform: translateY(0) skewX(0deg); }
         }
 
         footer {
             text-align: center;
             padding: 2rem;
-            color: #507090;
-            font-size: 0.85rem;
+            color: #406894;
+            font-size: 0.8rem;
             margin-top: 3rem;
-            border-top: 1px solid rgba(0, 210, 255, 0.2);
+            border-top: 1px solid rgba(0, 240, 255, 0.15);
         }
 
-        @media (max-width: 768px) {
-            .hero-section { grid-template-columns: 1fr; }
-            header { flex-direction: column; gap: 1rem; }
-            .hero-title { font-size: 2.8rem; }
-            .exp-header { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+        @media (max-width: 850px) {
+            .main-grid { grid-template-columns: 1fr; }
+            .status-panel { grid-template-columns: 1fr; }
+            .command-menu { flex-direction: row; flex-wrap: wrap; }
+            .cmd-btn { flex: 1 1 45%; font-size: 1.4rem; }
         }
     </style>
 </head>
 <body>
 
-    <canvas id="bg-canvas"></canvas>
+    <canvas id="p3-canvas"></canvas>
     <div class="scanlines"></div>
+    <div class="bg-watermark">DARK HOUR SYSTEM</div>
 
-    <div class="p3-container">
+    <div class="p3-wrapper">
         
-        <header>
-            <div class="logo-block">
-                <h1>MATHYS LEVERRIER // LUXORYS-BOOP</h1>
+        <!-- TOP HUD -->
+        <div class="top-hud">
+            <div class="p3-logo-banner">
+                <span>SYSTEM COMMAND // PORTFOLIO</span>
+                <h1>MATHYS LEVERRIER</h1>
             </div>
-            <nav>
-                <ul>
-                    <li><a href="#status"><span>Status</span></a></li>
-                    <li><a href="#slinks"><span>S.Links</span></a></li>
-                    <li><a href="#compendium"><span>Compendium</span></a></li>
-                    <li><a href="#velvet"><span>Velvet Room</span></a></li>
-                </ul>
-            </nav>
-        </header>
 
-        <!-- Status -->
-        <section id="status" class="hero-section">
-            <div class="avatar-card">
-                <div class="avatar-img-placeholder">
-                    <p style="font-size: 3rem;">🔮</p>
-                    <p>[ SYSTEM STATUS: ONLINE ]</p>
+            <div class="moon-widget">
+                <div class="moon-icon"></div>
+                <div class="date-text">
+                    <div class="day">4/11 TUE</div>
+                    <div class="phase">FULL MOON // DARK HOUR</div>
                 </div>
             </div>
+        </div>
 
-            <div class="hero-info">
-                <div class="subtitle-badge">MASTER ISA - IA & CLOUD COMPUTING</div>
-                <h1 class="hero-title">MATHYS LEVERRIER</h1>
-                <p class="hero-bio">
-                    Étudiant en Master ISA (Intelligence Artificielle & Cloud) à l'Université de Tours. Passionné par le développement Backend, les architectures distribuées Cloud (AWS, Azure) et le traitement de données / IA.
-                </p>
-
-                <div class="stats-grid">
-                    <div class="stat-item"><span class="stat-name">FORMATION:</span><span class="stat-val">Master ISA Tours</span></div>
-                    <div class="stat-item"><span class="stat-name">LANGUES:</span><span class="stat-val">Anglais C1 (Toeic)</span></div>
-                    <div class="stat-item"><span class="stat-name">MAIN TECH:</span><span class="stat-val">Java, Python, C++</span></div>
-                    <div class="stat-item"><span class="stat-name">CLOUD/DEVOPS:</span><span class="stat-val">AWS, Azure, Docker</span></div>
-                    <div class="stat-item"><span class="stat-name">GITHUB:</span><span class="stat-val">Luxorys-boop</span></div>
-                    <div class="stat-item"><span class="stat-name">PERMIS:</span><span class="stat-val">Permis B</span></div>
-                </div>
+        <!-- MAIN CONTENT AREA -->
+        <div class="main-grid">
+            
+            <!-- LEFT COMMAND WHEEL MENU -->
+            <div class="command-menu">
+                <button class="cmd-btn active" onclick="switchTab('status', this)">
+                    <span>01. STATUS</span>
+                    <span class="cmd-num">ANALYSIS</span>
+                </button>
+                <button class="cmd-btn" onclick="switchTab('slinks', this)">
+                    <span>02. S.LINK</span>
+                    <span class="cmd-num">EXP</span>
+                </button>
+                <button class="cmd-btn" onclick="switchTab('compendium', this)">
+                    <span>03. COMPENDIUM</span>
+                    <span class="cmd-num">REPOS</span>
+                </button>
+                <button class="cmd-btn" onclick="switchTab('tactics', this)">
+                    <span>04. TACTICS</span>
+                    <span class="cmd-num">SKILLS</span>
+                </button>
+                <button class="cmd-btn" onclick="switchTab('velvet', this)">
+                    <span>05. VELVET ROOM</span>
+                    <span class="cmd-num">CONTRACT</span>
+                </button>
             </div>
-        </section>
 
-        <!-- Social Links / Expériences -->
-        <section id="slinks">
-            <div class="section-header">
-                <h2>S.LINK // EXPÉRIENCES & PARCOURS</h2>
-                <div class="line"></div>
-            </div>
+            <!-- RIGHT DISPLAY SCREEN -->
+            <div class="display-screen">
 
-            <div class="experience-list">
-                <div class="exp-card">
-                    <div class="exp-header">
-                        <div>
-                            <span class="exp-role">Stagiaire Développeur Backend & Cloud</span> &bull; 
-                            <span class="exp-company">CGI Tours</span>
+                <!-- TAB 1: STATUS / PROFILE -->
+                <div id="tab-status" class="tab-content active">
+                    <div class="p3-dialogue-box">
+                        <div class="dialogue-speaker">MATHYS LEVERRIER</div>
+                        <p class="dialogue-text">
+                            "Étudiant en Master ISA (IA & Cloud) à l'Université de Tours. Spécialisé dans le développement Backend, les architectures cloud distribuées (AWS / Azure) et la gestion de projets informatiques."<span class="dialogue-cursor">▼</span>
+                        </p>
+                    </div>
+
+                    <div class="status-panel">
+                        <div class="radar-box">
+                            <div class="radar-title">SYSTEM PARAMETERS</div>
+                            <div class="param-row">
+                                <span class="param-label">ST</span>
+                                <span style="font-size:0.75rem; color:#80a8d0;">Backend (Java/.NET/Py)</span>
+                                <div class="param-bar-bg"><div class="param-bar-fill" style="width: 92%;"></div></div>
+                                <span class="param-val">92</span>
+                            </div>
+                            <div class="param-row">
+                                <span class="param-label">MA</span>
+                                <span style="font-size:0.75rem; color:#80a8d0;">IA & NLP (Scraping)</span>
+                                <div class="param-bar-bg"><div class="param-bar-fill" style="width: 88%;"></div></div>
+                                <span class="param-val">88</span>
+                            </div>
+                            <div class="param-row">
+                                <span class="param-label">EN</span>
+                                <span style="font-size:0.75rem; color:#80a8d0;">Cloud & DevOps (AWS/Azure)</span>
+                                <div class="param-bar-bg"><div class="param-bar-fill" style="width: 85%;"></div></div>
+                                <span class="param-val">85</span>
+                            </div>
+                            <div class="param-row">
+                                <span class="param-label">AG</span>
+                                <span style="font-size:0.75rem; color:#80a8d0;">Fullstack & React/Remix</span>
+                                <div class="param-bar-bg"><div class="param-bar-fill" style="width: 80%;"></div></div>
+                                <span class="param-val">80</span>
+                            </div>
+                            <div class="param-row">
+                                <span class="param-label">LU</span>
+                                <span style="font-size:0.75rem; color:#80a8d0;">Agile, SCRUM & Tests</span>
+                                <div class="param-bar-bg"><div class="param-bar-fill" style="width: 90%;"></div></div>
+                                <span class="param-val">90</span>
+                            </div>
                         </div>
-                        <span class="exp-date">Avril - Août 2026</span>
-                    </div>
-                    <div class="exp-body">
-                        Correction d'anomalies sur back-end .NET/Azure (projet 3CA BTP). Développement de nouvelles fonctionnalités, migration vers Vite/Remix, conteneurisation Docker, déploiement ArgoCD et résolution de vulnérabilités (CVE) sur le projet ADEME.
-                    </div>
-                </div>
 
-                <div class="exp-card">
-                    <div class="exp-header">
-                        <div>
-                            <span class="exp-role">Conception d'Agent IA (Scraping/NLP)</span> &bull; 
-                            <span class="exp-company">LIFAT (Laboratoire d'Informatique de Tours)</span>
+                        <div class="radar-box">
+                            <div class="radar-title">CHARACTER OVERVIEW</div>
+                            <p style="font-size:0.85rem; line-height:1.6; color:#a0c8f0;">
+                                &bull; <strong style="color:var(--p3-yellow);">FORMATION:</strong> Master ISA (IA & Cloud) - Univ. Tours<br>
+                                &bull; <strong style="color:var(--p3-yellow);">LANGUE:</strong> Anglais C1 (Toeic)<br>
+                                &bull; <strong style="color:var(--p3-yellow);">QUALITÉS:</strong> Rigoureux, Curieux, Persévérant<br>
+                                &bull; <strong style="color:var(--p3-yellow);">PERMIS:</strong> Permis B & Véhiculé<br>
+                                &bull; <strong style="color:var(--p3-yellow);">STATUS:</strong> GitHub Pro / Luxorys-boop
+                            </p>
                         </div>
-                        <span class="exp-date">Projet de Stage</span>
-                    </div>
-                    <div class="exp-body">
-                        Développement d'un Agent IA de Scraping/Crawling pour la collecte et la désambiguïsation de données d'étudiants post-études (Traitement automatique du langage / NLP).
                     </div>
                 </div>
 
-                <div class="exp-card">
-                    <div class="exp-header">
-                        <div>
-                            <span class="exp-role">Chef de Projet - App FullStack Hospitalière</span> &bull; 
-                            <span class="exp-company">CHRU de Tours</span>
+                <!-- TAB 2: S.LINK / EXPERIENCES -->
+                <div id="tab-slinks" class="tab-content">
+                    <div class="slink-grid">
+                        <div class="slink-card">
+                            <div class="slink-rank">RANK MAX // CHARIOT</div>
+                            <div class="slink-title">CGI TOURS &bull; STAGIAIRE BACKEND & CLOUD</div>
+                            <div class="slink-sub">Avril - Août 2026 | Tours, France</div>
+                            <p style="font-size:0.88rem; color:#c0d8f0; line-height:1.5;">
+                                Correction d'anomalies sur backend .NET/Azure (projet 3CA BTP). Développement de fonctionnalités, migration vers Remix/Vite, conteneurisation Docker, déploiement ArgoCD et résolution de vulnérabilités (CVE) sur le projet ADEME.
+                            </p>
                         </div>
-                        <span class="exp-date">Projet de fin de Licence</span>
-                    </div>
-                    <div class="exp-body">
-                        Gestion de projet en méthodes Agiles/SCRUM pour la conception d'une application de gestion des emplois du temps du personnel hospitalier (Stack J2EE & React).
+
+                        <div class="slink-card">
+                            <div class="slink-rank">RANK MAX // HERMIT</div>
+                            <div class="slink-title">LIFAT &bull; CONCEPTION D'AGENT IA (SCRAPING/NLP)</div>
+                            <div class="slink-sub">Laboratoire d'Informatique Fondamentale de Tours</div>
+                            <p style="font-size:0.88rem; color:#c0d8f0; line-height:1.5;">
+                                Conception d'un Agent IA autonome de Crawling/Scraping pour la collecte et la désambiguïsation automatisée de données d'étudiants post-études via du Traitement Automatique du Langage (NLP).
+                            </p>
+                        </div>
+
+                        <div class="slink-card">
+                            <div class="slink-rank">RANK MAX // EMPEROR</div>
+                            <div class="slink-title">CHRU DE TOURS &bull; CHEF DE PROJET FULLSTACK</div>
+                            <div class="slink-sub">Projet de fin de Licence Informatique</div>
+                            <p style="font-size:0.88rem; color:#c0d8f0; line-height:1.5;">
+                                Pilotage en méthode Agile/SCRUM d'une équipe pour le développement d'une application FullStack (J2EE & React) de gestion centralisée des emplois du temps du personnel hospitalier.
+                            </p>
+                        </div>
                     </div>
                 </div>
+
+                <!-- TAB 3: COMPENDIUM / PROJECTS -->
+                <div id="tab-compendium" class="tab-content">
+                    <div class="compendium-grid">
+                        <div class="persona-card">
+                            <div class="arcana-tag">ARCANA I // JUSTICE</div>
+                            <div class="repo-name">DetectorFraudSystem</div>
+                            <p class="repo-desc">Système de détection de fraudes basé sur du Machine Learning, classification et analyse statistique.</p>
+                            <a href="https://github.com/Luxorys-boop/DetectorFraudSystem" target="_blank" class="repo-btn">SUMMON REPO &rarr;</a>
+                        </div>
+
+                        <div class="persona-card">
+                            <div class="arcana-tag">ARCANA II // EMPRESS</div>
+                            <div class="repo-name">ProjetHospitalier</div>
+                            <p class="repo-desc">Application web fullstack de planification horaire pour le personnel du CHRU de Tours.</p>
+                            <a href="https://github.com/Luxorys-boop/ProjetHospitalier" target="_blank" class="repo-btn">SUMMON REPO &rarr;</a>
+                        </div>
+
+                        <div class="persona-card">
+                            <div class="arcana-tag">ARCANA III // STRENGTH</div>
+                            <div class="repo-name">ProjetProgrammeSportif</div>
+                            <p class="repo-desc">Application orientée objet Java/JavaFX pour le suivi et la personnalisation de programmes sportifs.</p>
+                            <a href="https://github.com/Luxorys-boop/ProjetProgrammeSportif" target="_blank" class="repo-btn">SUMMON REPO &rarr;</a>
+                        </div>
+
+                        <div class="persona-card">
+                            <div class="arcana-tag">ARCANA IV // MAGICIEN</div>
+                            <div class="repo-name">Minecraft_Retreiver_Project</div>
+                            <p class="repo-desc">Utilitaire de récupération et d'analyse de données système écrit en Java.</p>
+                            <a href="https://github.com/Luxorys-boop/Minecraft_Retreiver_Project" target="_blank" class="repo-btn">SUMMON REPO &rarr;</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 4: TACTICS / SKILLS -->
+                <div id="tab-tactics" class="tab-content">
+                    <div class="slink-grid">
+                        <div class="slink-card">
+                            <div class="slink-title" style="color:var(--p3-yellow);">LANGAGES & FRAMEWORKS</div>
+                            <p style="color:#d0e8ff; margin-top:0.5rem; font-size:0.9rem;">
+                                Java (Orienté Objet, JavaFX, J2EE, Spring), Python (PyTorch, TensorFlow, Scikit-learn, Pandas), C/C++, .NET, JavaScript/NodeJS, Remix, React, Scala, OCaml, PHP.
+                            </p>
+                        </div>
+                        <div class="slink-card">
+                            <div class="slink-title" style="color:var(--p3-yellow);">CLOUD & INFRASTRUCTURE</div>
+                            <p style="color:#d0e8ff; margin-top:0.5rem; font-size:0.9rem;">
+                                AWS (Certifications & Migration), Microsoft Azure, Google Cloud, Docker, Kubernetes, ArgoCD, CI/CD (GitHub Actions, GitLab CI), Linux Bash, Réseaux (VPC, Cisco, BGP, OSPF).
+                            </p>
+                        </div>
+                        <div class="slink-card">
+                            <div class="slink-title" style="color:var(--p3-yellow);">BASES DE DONNÉES & METHODES</div>
+                            <p style="color:#d0e8ff; margin-top:0.5rem; font-size:0.9rem;">
+                                SQL (PostgreSQL, MySQL, MariaDB, Amazon RDS), NoSQL (MongoDB, Neo4j, Apache HBase, DynamoDB), Méthodes Agiles, SCRUM, UML, Design Patterns, SOLID.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 5: VELVET ROOM / CONTACT -->
+                <div id="tab-velvet" class="tab-content">
+                    <div class="velvet-container">
+                        <div class="velvet-title">THE VELVET ROOM</div>
+                        <p style="color:#a0c8f0; font-size:1.05rem; margin-top:0.5rem;">
+                            "Bienvenue dans le Velvet Room du code. Signons un contrat pour vos prochains projets Cloud, IA ou Software."
+                        </p>
+
+                        <div class="velvet-links">
+                            <a href="mailto:mathys.perso@outlook.fr" class="p3-action-btn">
+                                <span>EMAIL: MATHYS.PERSO@OUTLOOK.FR</span>
+                            </a>
+                            <a href="https://github.com/Luxorys-boop" target="_blank" class="p3-action-btn">
+                                <span>GITHUB: LUXORYS-BOOP</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-        </section>
-
-        <!-- Compendium / Projets -->
-        <section id="compendium">
-            <div class="section-header">
-                <h2>PERSONA COMPENDIUM // PROJETS</h2>
-                <div class="line"></div>
-            </div>
-
-            <div class="compendium-grid">
-                <div class="persona-card">
-                    <div class="card-arcana">ARCANA I // JUSTICE</div>
-                    <h3 class="card-title">DetectorFraudSystem</h3>
-                    <p class="card-desc">Système d'analyse et de détection de fraudes basé sur des algorithmes de Machine Learning et du traitement de données.</p>
-                    <div class="card-tags">
-                        <span class="tag">Python</span>
-                        <span class="tag">Scikit-Learn</span>
-                        <span class="tag">Pandas</span>
-                    </div>
-                    <a href="https://github.com/Luxorys-boop/DetectorFraudSystem" target="_blank" class="card-btn">VIEW REPO &rarr;</a>
-                </div>
-
-                <div class="persona-card">
-                    <div class="card-arcana">ARCANA II // THE EMPRESS</div>
-                    <h3 class="card-title">ProjetHospitalier</h3>
-                    <p class="card-desc">Application web fullstack de planification et gestion des plannings hospitaliers pour le CHRU de Tours.</p>
-                    <div class="card-tags">
-                        <span class="tag">JavaScript</span>
-                        <span class="tag">React</span>
-                        <span class="tag">J2EE</span>
-                    </div>
-                    <a href="https://github.com/Luxorys-boop/ProjetHospitalier" target="_blank" class="card-btn">VIEW REPO &rarr;</a>
-                </div>
-
-                <div class="persona-card">
-                    <div class="card-arcana">ARCANA III // THE HERMIT</div>
-                    <h3 class="card-title">Agent IA Scraping & NLP</h3>
-                    <p class="card-desc">Agent autonome d'extraction, nettoyage et désambiguïsation de données textuelles complexes (LIFAT).</p>
-                    <div class="card-tags">
-                        <span class="tag">Python</span>
-                        <span class="tag">BeautifulSoup</span>
-                        <span class="tag">NLP</span>
-                    </div>
-                    <a href="https://github.com/Luxorys-boop" target="_blank" class="card-btn">VIEW ON GITHUB &rarr;</a>
-                </div>
-
-                <div class="persona-card">
-                    <div class="card-arcana">ARCANA IV // STRENGTH</div>
-                    <h3 class="card-title">ProjetProgrammeSportif</h3>
-                    <p class="card-desc">Application orientée objet pour la gestion et le suivi personnalisé de programmes d'entraînement sportif.</p>
-                    <div class="card-tags">
-                        <span class="tag">Java</span>
-                        <span class="tag">JavaFX</span>
-                    </div>
-                    <a href="https://github.com/Luxorys-boop/ProjetProgrammeSportif" target="_blank" class="card-btn">VIEW REPO &rarr;</a>
-                </div>
-            </div>
-        </section>
-
-        <!-- Velvet Room -->
-        <section id="velvet">
-            <div class="velvet-box">
-                <h3>VELVET ROOM // CONTRACT & CONTACT</h3>
-                <p style="color: #a0c0e0;">"Welcome to the Velvet Room. Feel free to reach out for contracts, apprenticeships, or tech discussions."</p>
-                
-                <div class="social-buttons">
-                    <a href="mailto:mathys.perso@outlook.fr" class="btn-p3"><span>EMAIL: MATHYS.PERSO@OUTLOOK.FR</span></a>
-                    <a href="https://github.com/Luxorys-boop" target="_blank" class="btn-p3"><span>GITHUB: LUXORYS-BOOP</span></a>
-                </div>
-            </div>
-        </section>
+        </div>
 
         <footer>
-            <p>DESIGN INSPIRED BY PERSONA 3 (ATLUS) &bull; DEVELOPED BY MATHYS LEVERRIER (LUXORYS-BOOP) &bull; 2026</p>
+            <p>PERSONA 3 RELOAD INSPIRED INTERFACE &bull; MATHYS LEVERRIER (LUXORYS-BOOP) &bull; 2026</p>
         </footer>
 
     </div>
 
+    <!-- P3 Canvas Animation + Web Audio Menu Sound Effects -->
     <script>
-        const canvas = document.getElementById('bg-canvas');
+        // Web Audio API Synth for Authentic P3 Menu Sound FX
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playP3Beep(freq = 580, type = 'sine') {
+            if (audioCtx.state === 'suspended') { audioCtx.resume(); }
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(freq * 1.5, audioCtx.currentTime + 0.08);
+            gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.08);
+        }
+
+        // Tab Switcher Function
+        function switchTab(tabId, btn) {
+            playP3Beep(650, 'triangle');
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.cmd-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById('tab-' + tabId).classList.add('active');
+            btn.classList.add('active');
+        }
+
+        // Add sound hover effect to buttons
+        document.querySelectorAll('.cmd-btn, .repo-btn, .p3-action-btn').forEach(btn => {
+            btn.addEventListener('mouseenter', () => playP3Beep(420, 'sine'));
+        });
+
+        // Dark Hour Background Canvas Animation
+        const canvas = document.getElementById('p3-canvas');
         const ctx = canvas.getContext('2d');
         let width, height, particles = [];
 
@@ -605,15 +777,15 @@
         window.addEventListener('resize', resize);
         resize();
 
-        class Particle {
+        class SoulParticle {
             constructor() { this.reset(); }
             reset() {
                 this.x = Math.random() * width;
                 this.y = Math.random() * height;
-                this.size = Math.random() * 2.5 + 0.5;
-                this.speedY = -(Math.random() * 0.8 + 0.2);
-                this.speedX = (Math.random() - 0.5) * 0.3;
-                this.opacity = Math.random() * 0.7 + 0.2;
+                this.size = Math.random() * 3 + 0.8;
+                this.speedY = -(Math.random() * 1.2 + 0.3);
+                this.speedX = (Math.random() - 0.5) * 0.4;
+                this.opacity = Math.random() * 0.8 + 0.2;
             }
             update() {
                 this.y += this.speedY;
@@ -621,23 +793,24 @@
                 if (this.y < 0) { this.reset(); this.y = height; }
             }
             draw() {
-                ctx.fillStyle = `rgba(0, 210, 255, ${this.opacity})`;
+                ctx.fillStyle = `rgba(0, 240, 255, ${this.opacity})`;
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                 ctx.fill();
             }
         }
 
-        for (let i = 0; i < 70; i++) { particles.push(new Particle()); }
+        for (let i = 0; i < 90; i++) { particles.push(new SoulParticle()); }
 
         function animate() {
             ctx.clearRect(0, 0, width, height);
             let grad = ctx.createLinearGradient(0, 0, width, height);
-            grad.addColorStop(0, '#040a14');
-            grad.addColorStop(0.5, '#091c38');
-            grad.addColorStop(1, '#02060d');
+            grad.addColorStop(0, '#010814');
+            grad.addColorStop(0.5, '#031836');
+            grad.addColorStop(1, '#01050f');
             ctx.fillStyle = grad;
             ctx.fillRect(0, 0, width, height);
+
             particles.forEach(p => { p.update(); p.draw(); });
             requestAnimationFrame(animate);
         }
